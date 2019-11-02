@@ -31,11 +31,11 @@ public class FSM : MonoBehaviour
         Debug.Log(curentState);
         switch (curentState)
         {
-            
             case State.pos1:
                 inputCommandObject.Destination = pos1.position;
                 Debug.Log(navMeshAgent.destination);
                 if (navMeshAgent.remainingDistance < 1)
+                    Debug.Log("Am ajuns");
                     curentState = State.change_color1;
                 break;
             case State.change_color1:
@@ -43,15 +43,7 @@ public class FSM : MonoBehaviour
                 inputCommandObject.DesiredColor = color;
                 curentState = State.pos2;
                 break;
-            case State.change_color2:
-                inputCommandObject.Destination = pos2.position;
-                break;
-            case State.pos2:
-                inputCommandObject.Destination = pos2.position;
-                if (navMeshAgent.remainingDistance < navMeshAgent.radius)
-                    curentState = State.change_color2;
-                curentState = State.pos1;
-                break;
+
         }
     }
 }
