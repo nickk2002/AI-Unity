@@ -5,17 +5,19 @@ using UnityEngine.AI;
 
 public class ChangeColor : MonoBehaviour
 {
-    [SerializeField] public InputCommandObject InputCommandObject;
-    private MeshRenderer meshRenderer;
+    [SerializeField] private InputCommandObject InputCommandObject;
+    [SerializeField] private MeshRenderer meshRenderer;
     private Light light;
 
     private void Awake()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         light = transform.GetChild(0).GetComponent<Light>();
+        Debug.Log(light);
     }
     private void Update()
     {   
         light.color = InputCommandObject.DesiredColor;
+        //meshRenderer.material.color = InputCommandObject.DesiredColor;
     }
 }

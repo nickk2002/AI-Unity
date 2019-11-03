@@ -9,12 +9,12 @@ public enum State
 
 public class FSM : MonoBehaviour
 {
-    [SerializeField] public InputCommandObject inputCommandObject;
+    [SerializeField] private InputCommandObject inputCommandObject;
     [SerializeField] private State initialState;
     private State curentState;
 
     [SerializeField] private Transform [] Positions;
-    [SerializeField] private GameObject ObjWithPozitions;
+
 
     [SerializeField] private NavMeshAgent navMeshAgent;
 
@@ -23,23 +23,14 @@ public class FSM : MonoBehaviour
     private Vector3 agentPosition,destinationPosition;
 
 
-    private void Start()
+    private void Awake()
     {
         curentState = initialState;
-        if(ObjWithPozitions != null && Positions.Length == 0)
-        {
-            int i = 0;
-            Positions = new Transform[ObjWithPozitions.transform.childCount];
-            foreach(Transform transform in ObjWithPozitions.transform)
-            {
-                Positions[i++] = transform;
-            }
-        }
         numberPositions = Positions.Length;
-
     }
     private void Update()
     {
+        Debug.Log(numberPositions);
 
         agentPosition = navMeshAgent.gameObject.transform.position;
         Debug.Log(index);

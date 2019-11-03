@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class Movement : MonoBehaviour
 {
 
-    [SerializeField] public InputCommandObject InputCommandObject;
+    [SerializeField] private InputCommandObject InputCommandObject;
     private NavMeshAgent navMeshAgent;
     private void Awake()
     {
