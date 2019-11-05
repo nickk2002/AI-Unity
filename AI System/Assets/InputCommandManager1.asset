@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75deb5309d0c8874ba82065011dd28d4, type: 3}
   m_Name: InputCommandManager1
   m_EditorClassIdentifier: 
-  Destination: {x: -11.8, y: 0, z: -49.6}
-  DesiredColor: {r: 0.5566241, g: 0.2523996, b: 0.61554295, a: 1}
+  destination: {x: 0, y: 0, z: 0}
+  desiredColor: {r: 0, g: 0, b: 0, a: 0}

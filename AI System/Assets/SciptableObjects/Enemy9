@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75deb5309d0c8874ba82065011dd28d4, type: 3}
   m_Name: Enemy9
   m_EditorClassIdentifier: 
-  Destination: {x: 0, y: 0, z: 0}
-  DesiredColor: {r: 0.64448506, g: 0.19450322, b: 0.64530426, a: 1}
+  destination: {x: 0, y: 0, z: 0}
+  desiredColor: {r: 0.706559, g: 0.3427892, b: 0.852787, a: 1}

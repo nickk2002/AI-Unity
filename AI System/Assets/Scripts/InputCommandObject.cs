@@ -5,6 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "InputCommandManager",menuName ="AI/InputCommandObject")]
 public class InputCommandObject : ScriptableObject
 {
-    public Vector3 Destination;
-    public Color DesiredColor;
+    public Vector3 destination;
+    public Color desiredColor;
 }

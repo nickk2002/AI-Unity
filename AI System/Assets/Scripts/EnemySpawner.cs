@@ -6,59 +6,36 @@ using UnityEditor;
 public class EnemySpawner : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] GameObject Prefab;
-    [SerializeField] Transform[] Positions;
-    [SerializeField] GameObject ChildGameObject;
+    [SerializeField] GameObject prefab;
+    [SerializeField] Transform[] spawnPositions;
+    [SerializeField] GameObject gameObjectWithChildren;
+    
+    private EnemyController enemyController;
 
-
-    void UpdatePlayer(GameObject Enemy, InputCommandObject script)
-    {
-        foreach (Transform transform in Enemy.transform)
-        {
-            Debug.Log(transform.gameObject.tag);
-            if (transform.gameObject.tag == "Player")
-            {
-                GameObject Player = transform.gameObject;
-                Movement movement = Player.gameObject.GetComponent<Movement>();
-                movement.InputCommandObject = script;
-                Debug.Log("AM GASIT CE TREBUIA");
-                ChangeColor changecolor = Player.gameObject.GetComponent<ChangeColor>();
-                changecolor.InputCommandObject = script;
-            }
-        }
-    }
-    void UpdateAI(GameObject Enemy,InputCommandObject script)
-    {
-        foreach(Transform transform in Enemy.transform)
-        {
-            if(transform.gameObject.tag == "AI")
-            {
-                GameObject AI = transform.gameObject;
-                FSM fsm = AI.gameObject.GetComponent<FSM>();
-                fsm.inputCommandObject = script;
-            }
-        }
-    }
     void Start()
     {
-        if(ChildGameObject && Positions.Length == 0)
+
+        
+        if (gameObjectWithChildren && spawnPositions.Length == 0)
         {
             int i = 0;
-            Positions = new Transform[ChildGameObject.transform.childCount];
-            foreach (Transform transform in ChildGameObject.transform)
+            spawnPositions = new Transform[gameObjectWithChildren.transform.childCount];
+            foreach (Transform transform in gameObjectWithChildren.transform)
             {
-                Positions[i++] = transform;
+                spawnPositions[i++] = transform;
             }
         }
-        for(int i = 0; i < Positions.Length; i++)
+        for(int i = 0; i < spawnPositions.Length; i++)
         {
-            Transform transform = Positions[i];
-            InputCommandObject script = ScriptableObject.CreateInstance("InputCommandObject") as InputCommandObject;
-            script.DesiredColor = new Color(Random.value, Random.value, Random.value);
-            AssetDatabase.CreateAsset(script, "Assets/SciptableObjects/Enemy" + i);
-            GameObject Enemy = Instantiate(Prefab, transform.position, transform.rotation);
-            UpdatePlayer(Enemy, script);
-            UpdateAI(Enemy, script);
+            Random.InitState(System.DateTime.Now.Millisecond);
+            Transform transform = spawnPositions[i];
+            InputCommandObject scriptableObject = ScriptableObject.CreateInstance("InputCommandObject") as InputCommandObject;
+            scriptableObject.desiredColor = new Color(Random.value, Random.value, Random.value);
+            AssetDatabase.CreateAsset(scriptableObject, "Assets/SciptableObjects/Enemy" + i);
+            GameObject enemy = Instantiate(prefab, transform.position, transform.rotation);
+            
+            enemyController = enemy.GetComponent<EnemyController>();
+            enemyController.inputCommandObject = scriptableObject;
         }
     }
 
