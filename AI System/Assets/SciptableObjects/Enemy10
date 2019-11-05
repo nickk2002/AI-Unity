@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75deb5309d0c8874ba82065011dd28d4, type: 3}
-  m_Name: Enemy7
+  m_Name: Enemy10
   m_EditorClassIdentifier: 
   destination: {x: 0, y: 0, z: 0}
-  desiredColor: {r: 0.5070407, g: 0.2624196, b: 0.7137771, a: 1}
+  desiredColor: {r: 0.5355815, g: 0.20779696, b: 0.005993844, a: 1}

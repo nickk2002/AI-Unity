@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Enemy0
   m_EditorClassIdentifier: 
   destination: {x: 0, y: 0, z: 0}
-  desiredColor: {r: 0.49020988, g: 0.6752797, b: 0.6952192, a: 1}
+  desiredColor: {r: 0.69056326, g: 0.59361905, b: 0.478249, a: 1}
