@@ -10,6 +10,7 @@ public enum State
 
 public class FSM : MonoBehaviour
 {
+
     private EnemyController enemyController;
     [SerializeField] public InputCommandObject inputCommandObject; 
     [SerializeField] private State initialState;
@@ -34,8 +35,6 @@ public class FSM : MonoBehaviour
     private GameObject bot;
 
 
-
-
     private void Start()
     {
 
@@ -50,6 +49,7 @@ public class FSM : MonoBehaviour
 
         //initalizez curentstate cu initial State
         curentState = initialState;
+
 
         if (!generateRandom)
         {
@@ -94,9 +94,9 @@ public class FSM : MonoBehaviour
                 Debug.Log(randomPosition);
                 GameObject newGameObject = new GameObject();
                 newGameObject.transform.SetParent(transform);
+                newGameObject.transform.position = randomPosition;
                 positions[i] = newGameObject.transform;
-                positions[i].position = randomPosition;
-                
+                print(randomPosition);
             }
         }
 
@@ -110,10 +110,10 @@ public class FSM : MonoBehaviour
         {
             curentState = State.attack;
         }
-
     }
     private void Update()
     {
+        Debug.Log(numberPositions);
 
         agentPosition = navMeshAgent.gameObject.transform.position;
         destinationPosition = positions[index].position;

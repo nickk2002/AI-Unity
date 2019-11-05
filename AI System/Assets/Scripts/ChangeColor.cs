@@ -8,6 +8,7 @@ public class ChangeColor : MonoBehaviour
     [SerializeField] public InputCommandObject inputCommandObject;
     EnemyController enemyController;
     private MeshRenderer meshRenderer;
+
     private Light light;
 
     private void Start()
@@ -17,9 +18,12 @@ public class ChangeColor : MonoBehaviour
         inputCommandObject = enemyController.inputCommandObject;
         meshRenderer = GetComponent<MeshRenderer>();
         light = transform.GetChild(0).GetComponent<Light>();
+        Debug.Log(light);
     }
     private void Update()
     {   
+
         light.color = inputCommandObject.desiredColor;
+
     }
 }

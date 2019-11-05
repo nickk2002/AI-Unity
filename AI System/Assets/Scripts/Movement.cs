@@ -6,8 +6,10 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Movement : MonoBehaviour
 {
+
     [SerializeField] public InputCommandObject inputCommandObject;
     EnemyController enemyController;
+
     private NavMeshAgent navMeshAgent;
     private void Start()
     {
