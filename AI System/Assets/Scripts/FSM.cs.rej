@@ -1,9 +1,0 @@
-diff a/AI System/Assets/Scripts/FSM.cs b/AI System/Assets/Scripts/FSM.cs	(rejected hunks)
-@@ -10,7 +10,6 @@
- 
- public class FSM : MonoBehaviour
- {
--    [SerializeField] public InputCommandObject inputCommandObject;
-     private EnemyController enemyController;
-     [SerializeField] public InputCommandObject inputCommandObject; 
-     [SerializeField] private State initialState;
