@@ -29,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
         {
             Random.InitState(System.DateTime.Now.Millisecond);
             Transform transform = spawnPositions[i];
-            InputCommandObject scriptableObject = ScriptableObject.CreateInstance("InputCommandObject") as InputCommandObject;
+            EnemyState scriptableObject = ScriptableObject.CreateInstance("InputCommandObject") as EnemyState;
             scriptableObject.desiredColor = new Color(Random.value, Random.value, Random.value);
             AssetDatabase.CreateAsset(scriptableObject, "Assets/ScriptableObjects/Enemy" + i);
             GameObject enemy = Instantiate(prefab, transform.position, transform.rotation);

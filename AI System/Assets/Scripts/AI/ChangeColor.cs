@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class ChangeColor : MonoBehaviour
 {
-    [SerializeField] public InputCommandObject inputCommandObject;
+    [SerializeField] public EnemyState inputCommandObject;
     EnemyController enemyController;
     private MeshRenderer meshRenderer;
     private Light light;

@@ -7,7 +7,7 @@ public class EnemyController : MonoBehaviour
 {
     public GameObject aiController;
     public GameObject bot;
-    public InputCommandObject inputCommandObject;
+    public EnemyState inputCommandObject;
     public GameObject player;
 
     public float angle;

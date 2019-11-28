@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class Movement : MonoBehaviour
 {
 
-    [SerializeField] public InputCommandObject inputCommandObject;
+    [SerializeField] public EnemyState enemyState;
     [SerializeField] private AIState aiState;
     [SerializeField] private LayerMask viewMask;
 
@@ -30,7 +30,7 @@ public class Movement : MonoBehaviour
             
             Vector3 directionPlayer = (player.transform.position - transform.position).normalized;
             float angleEnemyPlayer = Vector3.Angle(transform.forward, directionPlayer);
-            if (angleEnemyPlayer <= angle )
+            if (angleEnemyPlayer <= angle)
             {
                 if (!Physics.Linecast(transform.position, player.transform.position, viewMask))
                     return true;
@@ -40,10 +40,11 @@ public class Movement : MonoBehaviour
     }
     void AlarmTriggered()
     {
+        Debug.Log("DA");
         navMeshAgent.speed = alarmSpeed;
     }
 
-    private void Start()
+    private void Awake()
     {
         GameObject parinte = transform.parent.gameObject;
         enemyController = parinte.GetComponent<EnemyController>();
@@ -52,15 +53,14 @@ public class Movement : MonoBehaviour
         distance = enemyController.distance;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
-        inputCommandObject = enemyController.inputCommandObject;
+        enemyState = enemyController.inputCommandObject;
         aiState.alarmEvent.AddListener(AlarmTriggered);
     }
     void Update()
     {
-        navMeshAgent.destination = inputCommandObject.destination;
+        navMeshAgent.destination = enemyState.destination;
         if (CanSeePlayer())
         {
-            Debug.Log("Alarm!");
             aiState.alarmEvent.Invoke();
         }
     }
@@ -68,9 +68,9 @@ public class Movement : MonoBehaviour
     {
         
         Vector3 destination = Vector3.zero;
-        if (inputCommandObject != null)
+        if (enemyState != null)
         {
-            destination = inputCommandObject.destination;
+            destination = enemyState.destination;
         }
         if (destination != null)
         {

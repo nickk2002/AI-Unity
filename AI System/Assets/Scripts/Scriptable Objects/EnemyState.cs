@@ -2,18 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyState : MonoBehaviour
+[CreateAssetMenu(fileName = "InputCommandManager",menuName ="AI/InputCommandObject")]
+public class EnemyState : ScriptableObject
 {
-    // Start is called before the first frame update
-    [SerializeField] public InputCommandObject InputCommandObject;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Vector3 destination;
+    public Color desiredColor;
+    public Transform[] positions;
+    public float distance;
+    public float angle;
 }

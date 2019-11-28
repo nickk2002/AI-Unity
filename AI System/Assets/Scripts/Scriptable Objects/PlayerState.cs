@@ -1,10 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+
+[System.Serializable]
+public class FloatEvent : UnityEvent<float>
+{
+
+}
 
 [CreateAssetMenu(fileName = "PlayerHealth", menuName = "Player/PlayerHealth", order = 3)]
 public class PlayerState : ScriptableObject
 {
-    public int health;
-    public int maxHealth;
+    public float curentHealth;
+    public float maxHealth;
+
+    public FloatEvent TakenDamageEvent;
 }

@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75deb5309d0c8874ba82065011dd28d4, type: 3}
   m_Name: Script2
   m_EditorClassIdentifier: 
-  destination: {x: 4, y: 0, z: 6}
-  desiredColor: {r: 0, g: 0, b: 0, a: 0}
+  destination: {x: 11.97, y: 0, z: -10.51}
+  desiredColor: {r: 0.44196016, g: 0.13076092, b: 0.50248903, a: 1}
+  positions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

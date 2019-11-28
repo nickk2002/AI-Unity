@@ -2,7 +2,7 @@
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public enum State
+public enum _State
 {
     patrol,
     change_color,
@@ -14,9 +14,9 @@ public class FSM : MonoBehaviour
 
     private EnemyController enemyController;
     [SerializeField] private AIState aiState;
-    [SerializeField] public InputCommandObject inputCommandObject; 
-    [SerializeField] private State initialState;
-    private State curentState;
+    [SerializeField] public EnemyState inputCommandObject; 
+    [SerializeField] private _State initialState;
+    private _State curentState;
 
     /// generez pozitiile
     [SerializeField] private Transform [] positions;
@@ -29,7 +29,7 @@ public class FSM : MonoBehaviour
     [SerializeField] float unitRandom = 5f;
 
     /// legat de navmesh
-    [SerializeField] private NavMeshAgent navMeshAgent;
+    private NavMeshAgent navMeshAgent;
     [SerializeField] private float distanceAttack = 35;
     [SerializeField] public GameObject targetPlayer;
 
@@ -95,10 +95,12 @@ public class FSM : MonoBehaviour
         // iau playerul din scena,pozitia obiectului care se misca efectiv(Bot) si scriptableObject
         targetPlayer = enemyController.player;
         inputCommandObject = enemyController.inputCommandObject;
-        bot = enemyController.bot;
+
+        navMeshAgent = GetComponent<NavMeshAgent>();
 
         //initalizez curentstate cu initial State
         curentState = initialState;
+
 
         // culoare random
         Color color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
@@ -111,19 +113,20 @@ public class FSM : MonoBehaviour
         }
         else
         {
+            Debug.Log("teue");
             GenerareRandom();
         }
     }
     private void AlarmTrigger()
     {
-        curentState = State.follow_player;
+        curentState = _State.follow_player;
     }
     void CheckDistanceToPlayer()
     {
-        float curentdist = Vector3.Distance(targetPlayer.transform.position, bot.transform.position);
+        float curentdist = Vector3.Distance(targetPlayer.transform.position, transform.position);
         if (curentdist < distanceAttack)
         {
-            curentState = State.follow_player;
+            curentState = _State.follow_player;
         }
     }
     private void Update()
@@ -131,28 +134,28 @@ public class FSM : MonoBehaviour
         
         agentPosition = navMeshAgent.gameObject.transform.position;
         destinationPosition = positions[index].position;
-        CheckDistanceToPlayer();
+        Debug.Log(curentState);
 
         switch (curentState)
         {
-            case State.patrol:
+            case _State.patrol:
                 if (!navMeshAgent.pathPending)
                 {
                     inputCommandObject.destination = destinationPosition;
                 }
                 if (Vector3.Distance(agentPosition, destinationPosition) < 2f)
                 {
-                    curentState = State.change_color;
+                    curentState = _State.change_color;
                 }
                 break;
-            case State.change_color:
+            case _State.change_color:
                 Color color = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
                 inputCommandObject.desiredColor = color;
-                curentState = State.patrol;
+                curentState = _State.patrol;
                 index++;
                 index = index % numberPositions;
                 break;
-            case State.follow_player:
+            case _State.follow_player:
                 inputCommandObject.destination = targetPlayer.transform.position;
                 inputCommandObject.desiredColor = Color.red;
                 break;
