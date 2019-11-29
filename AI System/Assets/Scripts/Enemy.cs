@@ -6,7 +6,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
- 
+    [SerializeField] private bool drawGizmos = false;
+
     /// Scriptale objects
     private EnemyController enemyController;
 
@@ -38,8 +39,8 @@ public class Enemy : MonoBehaviour
     }
     [SerializeField] public GameObject targetPlayer;
     
-
-    void SetPatrolPositions()
+    /// pozitii patrol
+    private void SetPatrolPositions()
     {
         
         if (objectWithChildren != null && patrolPositions.Length == 0)
@@ -53,11 +54,31 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-
+    /// lumina
+    private void SetLight()
+    {
+        /// legat de lumina
+        light = transform.GetChild(0).GetComponent<VLight>();
+        light.spotRange = distanceView;
+        light.spotAngle = angle * 2;
+    }
+    /// initializez scriptableobject
+    private void SetAiState()
+    {
+        playerState.curentHealth = playerState.maxHealth;
+        aiState.numberAlerted = 0;
+        aiState.lastSeendPlayer = Vector3.zero;
+        aiState.alarm = false;
+    }
+   
     public void UpdateLight(Color color)
     {
         light.colorTint = color;
     }
+
+
+
+    /// despre inamic -> jucator
     public float DistanceToPlayer()
     {
         return Vector3.Distance(transform.position, Player.Instance.transform.position);
@@ -66,12 +87,18 @@ public class Enemy : MonoBehaviour
     {
         navMeshAgent.destination = destination;
     }
-
-    public void ChangeState(State<Enemy> newState)
+    public void TriggerAlarm()
     {
-        stateMachine.ChangeState(newState);
+        aiState.alarm = true;
     }
-    
+    public void SetLastSeenPlayer(Vector3 position)
+    {
+        aiState.lastSeendPlayer = position;
+    }
+    public Vector3 GetLastSeenPlayer()
+    {
+        return aiState.lastSeendPlayer;
+    }
     public bool CanSeePlayer()
     {
         float curentDist = DistanceToPlayer();
@@ -81,41 +108,37 @@ public class Enemy : MonoBehaviour
         {
             if (angleEnemyPlayer <= angle)
             {
-                if (!Physics.Linecast(transform.position, targetPlayer.transform.position, viewMask))
+                RaycastHit hit;
+                if (Physics.Linecast(transform.position, targetPlayer.transform.position, out hit))
                 {
-                    return true;
+                    GameObject objectHit = hit.collider.gameObject;
+                    if (objectHit == Player.Instance)
+                        return true;
                 }
             }
         }
         return false;
     }
-    private float AreaCalculator(float xa,float ya,float xb,float yb,float xc,float yc)
+
+    public void ChangeState(State<Enemy> newState)
     {
-        float modul = Mathf.Abs(xa * (yb - yc) + xb * (yc - ya) + xc * (ya - yb));
-        return modul / 2;
+        stateMachine.ChangeState(newState);
     }
-    void SetLight()
-    {
-        /// legat de lumina
-        light = transform.GetChild(0).GetComponent<VLight>();
-        light.spotRange = distanceView * Mathf.Cos((Mathf.PI * angle / 180));
-        light.spotAngle = angle * 2;
-    }
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        Random.seed = System.DateTime.Now.Millisecond;
         if (targetPlayer == null)
             targetPlayer = Player.Instance;
+
         SetPatrolPositions();
         SetLight();
-
-        aiState.lastSeendPlayer = Vector3.zero;
-        aiState.alarm = false;
+        SetAiState();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         meshRenderer = GetComponent<MeshRenderer>();
-
 
         stateMachine = new StateMachine<Enemy>(this);
         stateMachine.SetCurentState(new Patrol());
@@ -125,10 +148,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
-        if (CanSeePlayer())
-            Debug.Log("see player");
-        else
-            Debug.Log("Can't see player");
     }
     void Draw()
     {
@@ -137,13 +156,15 @@ public class Enemy : MonoBehaviour
         Vector3 destination = navMeshAgent.destination;
         if (destination != null)
         {
+            float dist = distanceView;
             Vector3 direction = transform.forward;
-            direction = Quaternion.Euler(0, -angle, 0) * direction * distanceView;
+            direction = Quaternion.Euler(0, -angle, 0) * direction * dist;
             Vector3 posLeft = transform.position + direction;
             direction = transform.forward;
-            direction = Quaternion.Euler(0, angle, 0) * direction * distanceView;
+            direction = Quaternion.Euler(0, angle, 0) * direction * dist;
             Vector3 posRight = transform.position + direction;
 
+            //Debug.DrawLine(transform.position, targetPlayer.transform.position,Color.blue);
             Gizmos.DrawLine(transform.position, posLeft);
             Gizmos.DrawLine(transform.position, posRight);
             Gizmos.DrawLine(posLeft, posRight);
@@ -153,6 +174,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Draw();
+        if(drawGizmos)
+            Draw();
     }
 }

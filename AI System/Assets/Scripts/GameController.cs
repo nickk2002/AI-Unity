@@ -2,8 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController
+public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    static public GameObject Player = GameObject.FindWithTag("Player"); 
+    public static GameController Instance = null;
+    public static GameObject Player;
+    public void CallCoroutine(IEnumerator enumerator)
+    {
+        Debug.Log("Start time coroutine");
+        StartCoroutine(enumerator);
+        Debug.Log("End time");
+    }
+    private void Awake()
+    {
+        Player = GameObject.FindWithTag("Player");
+        if (Instance == null)
+            Instance = this;
+    }
+    private void Update()
+    {
+        ///StartCoroutine(F());
+    }
+
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd1c22d6a2e975b4eaf4d4c798463b61, type: 3}
   m_Name: PlayerState
   m_EditorClassIdentifier: 
-  curentHealth: 100
+  curentHealth: -5
   maxHealth: 100
   TakenDamageEvent:
     m_PersistentCalls:

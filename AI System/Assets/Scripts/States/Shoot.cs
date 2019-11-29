@@ -8,7 +8,7 @@ public class Shoot : State<Enemy>
 {
     private static Shoot instance = null;
     private static object padlock = new object();
-    private float curentTime = 0;
+    private Enemy enemy;
 
     private Shoot()
     {
@@ -26,41 +26,53 @@ public class Shoot : State<Enemy>
             }
         }
     }
-
+    void Draw(Transform enemy, Transform player)
+    {
+        Debug.DrawLine(enemy.position, player.position, Color.green);
+    }
+    IEnumerator SimulareShoot()
+    {
+        while (true)
+        {
+            Draw(enemy.transform, Player.Instance.transform);
+            enemy.playerState.TakenDamageEvent.Invoke(enemy.damage);
+            yield return new WaitForSeconds(enemy.aiState.shootingDelay);
+        }
+    }
+    IEnumerator UpdatePlayerPosition()
+    {
+        while (true)
+        {
+            if (enemy.CanSeePlayer())
+            {
+                Debug.Log("change position");
+                enemy.SetLastSeenPlayer(Player.Instance.transform.position);
+            }
+            yield return new WaitForSeconds(0.5f);
+        }    
+    }
     public override void Enter(Enemy owner)
     {
-        curentTime = 0;
-        owner.GetComponent<NavMeshAgent>().isStopped = true;
-        
-    }
-    void Draw(Transform enemy,Transform player)
-    {
-        Debug.DrawLine(enemy.position, player.position,Color.green);
+        enemy = owner;
+        owner.NavMeshAgent.isStopped = true;
+        GameController.Instance.CallCoroutine(SimulareShoot());
+        GameController.Instance.CallCoroutine(UpdatePlayerPosition());
     }
 
     public override void Execute(Enemy owner)
     {
-
-        if (curentTime >= owner.aiState.shootingDelay || curentTime == 0)
-        {
-            Debug.Log("Shoot");
-            Draw(owner.transform, Player.Instance.transform);
-            owner.aiState.lastSeendPlayer = Player.Instance.transform.position;
-            owner.playerState.TakenDamageEvent.Invoke(owner.damage);
-            curentTime = 0;
-        }
-        Debug.Log("wait to shoot");
         if (!owner.CanSeePlayer())
-        { 
+        {
+            GameController.Instance.StopAllCoroutines();
             Debug.Log("can't see player");
             owner.ChangeState(Alarm.Instance);
         }
-        curentTime += Time.deltaTime;
     }
 
     public override void Exit(Enemy owner)
     {
-        Debug.Log("Go to find him can't se him");
+        owner.aiState.numberAlerted = 0;
         owner.NavMeshAgent.isStopped = false;
+        GameController.Instance.StopAllCoroutines();
     }
 }

@@ -18,6 +18,7 @@ public class PlayerHealth : MonoBehaviour
     private void TakeDamage(float damage)
     {
         curentHealth -= damage;
+        playerState.curentHealth = curentHealth;
         if (curentHealth <= 0)
             Destroy(gameObject);
     }

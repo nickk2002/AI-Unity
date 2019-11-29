@@ -21,12 +21,12 @@ public class AIState : ScriptableObject
     public float shootingDistance = 5f;
     public float shootingDelay = 1f;
     public float searchRadius = 10f;
+    public float patrolWaitTime = 1.5f;
     public int numberTries = 2;
 
     public AlarmState curentAlarmState;
     [SerializeField] private int easyAlerted;
     [SerializeField] private int mediumAlerted;
     public int numberAlerted;
-
 
 }

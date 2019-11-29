@@ -11,7 +11,7 @@ public class Patrol : State<Enemy>
     private int numberPositions = 0;
     private static Patrol instance = null;
     private static readonly object padlock = new object();
-
+    private Enemy enemy;
     public Patrol()
     {
         patrolPositions = new Transform[] { };
@@ -31,8 +31,15 @@ public class Patrol : State<Enemy>
             }
         }
     }
+    IEnumerator Wait()
+    {
+        enemy.NavMeshAgent.isStopped = true;
+        yield return new WaitForSeconds(enemy.aiState.patrolWaitTime);
+        enemy.NavMeshAgent.isStopped = false;
+    }
     public override void Enter(Enemy owner)
     {
+        enemy = owner;
         patrolPositions = owner.patrolPositions;
         numberPositions = patrolPositions.Length;
     }
@@ -45,15 +52,24 @@ public class Patrol : State<Enemy>
         {
             index++;
             index = index % numberPositions;
+            GameController.Instance.CallCoroutine(Wait());
             owner.ChangeState(SwitchColor.Instance);
         }
         if (owner.CanSeePlayer())
-        { 
-            owner.aiState.alarm = true;
-            owner.aiState.lastSeendPlayer = owner.targetPlayer.transform.position;
+        {
+            if (owner.aiState.alarm == false)
+            {
+                owner.TriggerAlarm();
+                owner.aiState.alarm = true;
+            }
+            owner.SetLastSeenPlayer(Player.Instance.transform.position);
         }
-        if (owner.aiState.alarm == true)
+        if (owner.aiState.alarm == true && owner.aiState.numberAlerted <= 1)
+        {
+            Debug.Log(enemy);
+            owner.aiState.numberAlerted++;
             owner.ChangeState(Alarm.Instance);
+        }
             
     }
     public override void Exit(Enemy owner)

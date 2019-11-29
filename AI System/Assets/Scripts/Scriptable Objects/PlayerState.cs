@@ -17,4 +17,9 @@ public class PlayerState : ScriptableObject
     public float maxHealth;
 
     public FloatEvent TakenDamageEvent;
+
+    void Start()
+    {
+        curentHealth = maxHealth;
+    }
 }

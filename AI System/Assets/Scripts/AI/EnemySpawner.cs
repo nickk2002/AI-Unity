@@ -28,14 +28,10 @@ public class EnemySpawner : MonoBehaviour
         for(int i = 0; i < spawnPositions.Length; i++)
         {
             Random.InitState(System.DateTime.Now.Millisecond);
-            Transform transform = spawnPositions[i];
-            EnemyState scriptableObject = ScriptableObject.CreateInstance("InputCommandObject") as EnemyState;
-            scriptableObject.desiredColor = new Color(Random.value, Random.value, Random.value);
-            AssetDatabase.CreateAsset(scriptableObject, "Assets/ScriptableObjects/Enemy" + i);
-            GameObject enemy = Instantiate(prefab, transform.position, transform.rotation);
+            Transform enemyTransform = spawnPositions[i];
+            GameObject enemy = Instantiate(prefab, enemyTransform.position, enemyTransform.rotation);
             
-            enemyController = enemy.GetComponent<EnemyController>();
-            enemyController.inputCommandObject = scriptableObject;
+
         }
     }
 

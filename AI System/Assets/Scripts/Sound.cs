@@ -9,8 +9,14 @@ public class Sound : MonoBehaviour
     private AudioSource audioSource;
     void PlaySound()
     {
-        audioSource.Play();
+        if (audioSource.loop == false)
+        {
+            audioSource.loop = true;
+            audioSource.Play();
+        }
+        
     }
+
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -19,7 +25,7 @@ public class Sound : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {   
+
     }
 }
