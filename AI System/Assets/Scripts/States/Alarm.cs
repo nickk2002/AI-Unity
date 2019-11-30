@@ -33,9 +33,9 @@ public class Alarm : State<Enemy>
     {
         Debug.Log("Entered Alarm!");
         owner.NavMeshAgent.speed = owner.aiState.alarmSpeed;
-        radius = owner.aiState.searchRadius;
+        radius = owner.aiState.alarmSearchRadius;
         shootingDistance = owner.aiState.shootingDistance;
-        curentTries = owner.aiState.numberTries;
+        curentTries = owner.aiState.alarmInvestigateTries;
         owner.SetDestination(owner.aiState.lastSeendPlayer);
         owner.aiState.alarmEvent.Invoke();
         curentTries = 0;

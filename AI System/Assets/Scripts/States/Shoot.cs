@@ -45,25 +45,23 @@ public class Shoot : State<Enemy>
         {
             if (enemy.CanSeePlayer())
             {
-                Debug.Log("change position");
                 enemy.SetLastSeenPlayer(Player.Instance.transform.position);
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(enemy.aiState.shootingUpdatePosDelay);
         }    
     }
     public override void Enter(Enemy owner)
     {
         enemy = owner;
         owner.NavMeshAgent.isStopped = true;
-        GameController.Instance.CallCoroutine(SimulareShoot());
-        GameController.Instance.CallCoroutine(UpdatePlayerPosition());
+        GameController.Instance.StartCoroutine(SimulareShoot());
+        GameController.Instance.StartCoroutine(UpdatePlayerPosition());
     }
 
     public override void Execute(Enemy owner)
     {
         if (!owner.CanSeePlayer())
         {
-            GameController.Instance.StopAllCoroutines();
             Debug.Log("can't see player");
             owner.ChangeState(Alarm.Instance);
         }
@@ -71,7 +69,6 @@ public class Shoot : State<Enemy>
 
     public override void Exit(Enemy owner)
     {
-        owner.aiState.numberAlerted = 0;
         owner.NavMeshAgent.isStopped = false;
         GameController.Instance.StopAllCoroutines();
     }

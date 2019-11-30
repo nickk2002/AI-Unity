@@ -31,12 +31,6 @@ public class Patrol : State<Enemy>
             }
         }
     }
-    IEnumerator Wait()
-    {
-        enemy.NavMeshAgent.isStopped = true;
-        yield return new WaitForSeconds(enemy.aiState.patrolWaitTime);
-        enemy.NavMeshAgent.isStopped = false;
-    }
     public override void Enter(Enemy owner)
     {
         enemy = owner;
@@ -52,19 +46,18 @@ public class Patrol : State<Enemy>
         {
             index++;
             index = index % numberPositions;
-            GameController.Instance.CallCoroutine(Wait());
             owner.ChangeState(SwitchColor.Instance);
         }
         if (owner.CanSeePlayer())
         {
-            if (owner.aiState.alarm == false)
+            if (owner.aiState.alarmTriggered == false)
             {
                 owner.TriggerAlarm();
-                owner.aiState.alarm = true;
+                owner.aiState.alarmTriggered = true;
             }
             owner.SetLastSeenPlayer(Player.Instance.transform.position);
         }
-        if (owner.aiState.alarm == true && owner.aiState.numberAlerted <= 1)
+        if (owner.aiState.alarmTriggered == true && owner.aiState.numberAlerted <= 1)
         {
             Debug.Log(enemy);
             owner.aiState.numberAlerted++;
@@ -74,6 +67,6 @@ public class Patrol : State<Enemy>
     }
     public override void Exit(Enemy owner)
     {
-       
+        GameController.Instance.StopAllCoroutines();
     }
 }

@@ -38,6 +38,8 @@ public class Enemy : MonoBehaviour
         set => navMeshAgent = value;
     }
     [SerializeField] public GameObject targetPlayer;
+
+    public Animator animator;
     
     /// pozitii patrol
     private void SetPatrolPositions()
@@ -59,8 +61,13 @@ public class Enemy : MonoBehaviour
     {
         /// legat de lumina
         light = transform.GetChild(0).GetComponent<VLight>();
-        light.spotRange = distanceView;
-        light.spotAngle = angle * 2;
+        if (light != null)
+        {
+            light.spotRange = distanceView;
+            light.spotAngle = angle * 2;
+        }
+        else
+            Debug.LogWarning("No light setup");
     }
     /// initializez scriptableobject
     private void SetAiState()
@@ -68,12 +75,13 @@ public class Enemy : MonoBehaviour
         playerState.curentHealth = playerState.maxHealth;
         aiState.numberAlerted = 0;
         aiState.lastSeendPlayer = Vector3.zero;
-        aiState.alarm = false;
+        aiState.alarmTriggered = false;
     }
    
     public void UpdateLight(Color color)
     {
-        light.colorTint = color;
+        if(light != null)
+            light.colorTint = color;
     }
 
 
@@ -89,7 +97,7 @@ public class Enemy : MonoBehaviour
     }
     public void TriggerAlarm()
     {
-        aiState.alarm = true;
+        aiState.alarmTriggered = true;
     }
     public void SetLastSeenPlayer(Vector3 position)
     {
@@ -124,11 +132,12 @@ public class Enemy : MonoBehaviour
     {
         stateMachine.ChangeState(newState);
     }
-    
+
 
     // Start is called before the first frame update
     void Start()
     {
+        
         Random.seed = System.DateTime.Now.Millisecond;
         if (targetPlayer == null)
             targetPlayer = Player.Instance;
@@ -138,7 +147,9 @@ public class Enemy : MonoBehaviour
         SetAiState();
 
         navMeshAgent = GetComponent<NavMeshAgent>();
-        meshRenderer = GetComponent<MeshRenderer>();
+        animator = GetComponent<Animator>();
+
+
 
         stateMachine = new StateMachine<Enemy>(this);
         stateMachine.SetCurentState(new Patrol());

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AIController
   m_EditorClassIdentifier: 
   alarm: 1
-  lastSeendPlayer: {x: 26.402384, y: -0.00000071525574, z: 7.9311066}
+  lastSeendPlayer: {x: -9.58, y: 0, z: 7.1}
   alarmEvent:
     m_PersistentCalls:
       m_Calls:
@@ -32,11 +32,11 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   alarmSpeed: 4
   shootingDistance: 30
-  shootingDelay: 0.5
+  shootingDelay: 1
   searchRadius: 30
   patrolWaitTime: 3
   numberTries: 5
   curentAlarmState: 0
   easyAlerted: 0
   mediumAlerted: 0
-  numberAlerted: 0
+  numberAlerted: 2
