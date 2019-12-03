@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 296a4faceea7483429fcd0ea500e8d23, type: 3}
   m_Name: AIController
   m_EditorClassIdentifier: 
-  alarm: 1
-  lastSeendPlayer: {x: -9.58, y: 0, z: 7.1}
+  alarmTriggered: 0
+  lastSeendPlayer: {x: 0, y: 0, z: 0}
   alarmEvent:
     m_PersistentCalls:
       m_Calls:
@@ -30,13 +30,14 @@ MonoBehaviour:
         m_CallState: 1
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  alarmSpeed: 4
+  patrolWaitTime: 1
   shootingDistance: 30
   shootingDelay: 1
-  searchRadius: 30
-  patrolWaitTime: 3
-  numberTries: 5
+  shootingUpdatePosDelay: 2
+  alarmSpeed: 4
+  alarmSearchRadius: 10
+  alarmInvestigateTries: 2000
   curentAlarmState: 0
   easyAlerted: 0
   mediumAlerted: 0
-  numberAlerted: 2
+  numberAlerted: 0

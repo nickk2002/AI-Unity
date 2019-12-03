@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,9 +12,7 @@ public class Enemy : MonoBehaviour
     /// Scriptale objects
     private EnemyController enemyController;
 
-
-    /// initial state
-    [SerializeField] private _State initialState;
+    public string State;
     private StateMachine<Enemy> stateMachine;
 
     [SerializeField] public float damage;
@@ -132,13 +131,16 @@ public class Enemy : MonoBehaviour
     {
         stateMachine.ChangeState(newState);
     }
-
+    public State<Enemy> GetParticularState(Type stateType)
+    {
+        return stateMachine.GetStateDictionary(stateType);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
-        Random.seed = System.DateTime.Now.Millisecond;
+
+        UnityEngine.Random.seed = DateTime.Now.Millisecond;
         if (targetPlayer == null)
             targetPlayer = Player.Instance;
 
@@ -150,15 +152,21 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
 
 
-
-        stateMachine = new StateMachine<Enemy>(this);
-        stateMachine.SetCurentState(new Patrol());
+        var states = new Dictionary<Type, State<Enemy>>
+        {
+            {typeof(Patrol), new Patrol() },
+            {typeof(SwitchColor), new SwitchColor() },
+            {typeof(Alarm),new Alarm() },
+        };
+        stateMachine = new StateMachine<Enemy>(this,states);
+        stateMachine.SetCurentState(states[typeof(Patrol)]);
     }
 
     // Update is called once per frame
     void Update()
     {
         stateMachine.Update();
+        Debug.Log(this.gameObject + " is currently in the state : " + stateMachine.GetCurentState());
     }
     void Draw()
     {

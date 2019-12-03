@@ -15,7 +15,6 @@ public class Patrol : State<Enemy>
     public Patrol()
     {
         patrolPositions = new Transform[] { };
-        
     }
     public static Patrol Instance
     {
@@ -38,15 +37,16 @@ public class Patrol : State<Enemy>
         numberPositions = patrolPositions.Length;
     }
     public override void Execute(Enemy owner)
-    { 
+    {
         Vector3 destination = patrolPositions[index].position;
-        if(owner.NavMeshAgent.transform.position != destination)
+        /// owner.NavMeshAgent.transform.position -.> (10,0,10) , (0,0,0)
+        if (owner.NavMeshAgent.transform.position != destination)
             owner.SetDestination(destination);
-        if (Vector3.Distance(owner.NavMeshAgent.transform.position, patrolPositions[index].position) < 2f)
+        if (Vector3.Distance(owner.NavMeshAgent.transform.position, destination) < 2f)
         {
             index++;
             index = index % numberPositions;
-            owner.ChangeState(SwitchColor.Instance);
+            owner.ChangeState(owner.GetParticularState(typeof(SwitchColor)));
         }
         if (owner.CanSeePlayer())
         {
@@ -57,16 +57,16 @@ public class Patrol : State<Enemy>
             }
             owner.SetLastSeenPlayer(Player.Instance.transform.position);
         }
-        if (owner.aiState.alarmTriggered == true && owner.aiState.numberAlerted <= 1)
+        if (owner.aiState.alarmTriggered == true && owner.aiState.numberAlerted  == 0)
         {
             Debug.Log(enemy);
             owner.aiState.numberAlerted++;
-            owner.ChangeState(Alarm.Instance);
+            owner.ChangeState(owner.GetParticularState(typeof(Alarm)));
         }
             
     }
     public override void Exit(Enemy owner)
     {
-        GameController.Instance.StopAllCoroutines();
+       
     }
 }

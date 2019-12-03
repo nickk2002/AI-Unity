@@ -12,7 +12,7 @@ public class Alarm : State<Enemy>
     private float curentTries,numberTries;
     private float shootingDistance;
 
-    private Alarm()
+    public Alarm()
     {
 
     }
@@ -83,7 +83,7 @@ public class Alarm : State<Enemy>
             {
                 Debug.Log("go to patrol");
                 owner.aiState.numberAlerted = 0;
-                owner.ChangeState(Patrol.Instance);
+                owner.ChangeState(owner.GetParticularState(typeof(Patrol)));
             }
         }
     }

@@ -63,7 +63,7 @@ public class Shoot : State<Enemy>
         if (!owner.CanSeePlayer())
         {
             Debug.Log("can't see player");
-            owner.ChangeState(Alarm.Instance);
+            owner.ChangeState(owner.GetParticularState(typeof(Alarm)));
         }
     }
 

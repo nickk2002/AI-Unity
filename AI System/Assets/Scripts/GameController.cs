@@ -13,9 +13,6 @@ public class GameController : MonoBehaviour
         if (Instance == null)
             Instance = this;
     }
-    private void Update()
-    {
-        ///StartCoroutine(F());
-    }
+
 
 }
