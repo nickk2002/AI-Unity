@@ -15,19 +15,6 @@ public class SwitchColor : State<Enemy>
     {
         
     }
-    public static SwitchColor Instance
-    {
-        get
-        {
-            lock(padlock){
-                if (instance == null)
-                {
-                    instance = new SwitchColor();
-                }
-            }
-            return instance;
-        }
-    }
     public override void Enter(Enemy owner)
     {
         enemy = owner;

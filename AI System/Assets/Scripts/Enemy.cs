@@ -157,6 +157,7 @@ public class Enemy : MonoBehaviour
             {typeof(Patrol), new Patrol() },
             {typeof(SwitchColor), new SwitchColor() },
             {typeof(Alarm),new Alarm() },
+            {typeof(Shoot),new Shoot() },
         };
         stateMachine = new StateMachine<Enemy>(this,states);
         stateMachine.SetCurentState(states[typeof(Patrol)]);

@@ -33,9 +33,7 @@ public class AIState : ScriptableObject
 
 
 
-    public AlarmState curentAlarmState;
-    [SerializeField] private int easyAlerted;
-    [SerializeField] private int mediumAlerted;
+    public int maxNumberAlerted;
     public int numberAlerted;
 
 }

@@ -16,26 +16,15 @@ public class Alarm : State<Enemy>
     {
 
     }
-    public static Alarm Instance
-    {
-        get
-        {
-            lock (padlock)
-            {
-                if (instance == null)
-                    instance = new Alarm();
-                return instance;
-            }
-        }
-    }
-
     public override void Enter(Enemy owner)
     {
         Debug.Log("Entered Alarm!");
         owner.NavMeshAgent.speed = owner.aiState.alarmSpeed;
+
         radius = owner.aiState.alarmSearchRadius;
         shootingDistance = owner.aiState.shootingDistance;
-        curentTries = owner.aiState.alarmInvestigateTries;
+        numberTries = owner.aiState.alarmInvestigateTries;
+
         owner.SetDestination(owner.aiState.lastSeendPlayer);
         owner.aiState.alarmEvent.Invoke();
         curentTries = 0;
@@ -46,13 +35,13 @@ public class Alarm : State<Enemy>
         float lowerBound, upperBound;
         if (number <= 0.7) /// se duce in fata cu un procentaj de 70%
         {
-            lowerBound = 0;
+            lowerBound = radius / 2;
             upperBound = radius;
         }
         else
         {
             lowerBound = -radius;
-            upperBound = radius;
+            upperBound = 0;
         }
         return Tuple.Create(lowerBound, upperBound);
     }
@@ -70,9 +59,10 @@ public class Alarm : State<Enemy>
     {
        
         if (owner.CanSeePlayer() && owner.DistanceToPlayer() <= shootingDistance)
-            owner.ChangeState(Shoot.Instance);
+            owner.ChangeState(owner.GetParticularState(typeof(Shoot)));
         if (owner.NavMeshAgent.remainingDistance < 1)
         {
+            Debug.Log(curentTries);
             if (curentTries <= numberTries)
             {
                 Vector3 randomDestination = RandomSearchPosition() + owner.aiState.lastSeendPlayer;
@@ -83,6 +73,7 @@ public class Alarm : State<Enemy>
             {
                 Debug.Log("go to patrol");
                 owner.aiState.numberAlerted = 0;
+                owner.aiState.alarmTriggered = false;
                 owner.ChangeState(owner.GetParticularState(typeof(Patrol)));
             }
         }

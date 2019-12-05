@@ -57,7 +57,7 @@ public class Patrol : State<Enemy>
             }
             owner.SetLastSeenPlayer(Player.Instance.transform.position);
         }
-        if (owner.aiState.alarmTriggered == true && owner.aiState.numberAlerted  == 0)
+        if (owner.aiState.alarmTriggered == true && owner.aiState.numberAlerted  + 1  <= owner.aiState.maxNumberAlerted)
         {
             Debug.Log(enemy);
             owner.aiState.numberAlerted++;

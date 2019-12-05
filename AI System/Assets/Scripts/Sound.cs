@@ -9,11 +9,9 @@ public class Sound : MonoBehaviour
     private AudioSource audioSource;
     void PlaySound()
     {
-        if (audioSource.loop == false)
-        {
-            audioSource.loop = true;
+        if(!audioSource.isPlaying)
             audioSource.Play();
-        }
+        
         
     }
 

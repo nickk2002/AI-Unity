@@ -9,8 +9,9 @@ public class Shoot : State<Enemy>
     private static Shoot instance = null;
     private static object padlock = new object();
     private Enemy enemy;
+    private Coroutine shootCoroutine;
 
-    private Shoot()
+    public Shoot()
     {
 
     }
@@ -54,7 +55,7 @@ public class Shoot : State<Enemy>
     {
         enemy = owner;
         owner.NavMeshAgent.isStopped = true;
-        GameController.Instance.StartCoroutine(SimulareShoot());
+        shootCoroutine = GameController.Instance.StartCoroutine(SimulareShoot());
         GameController.Instance.StartCoroutine(UpdatePlayerPosition());
     }
 
@@ -62,14 +63,14 @@ public class Shoot : State<Enemy>
     {
         if (!owner.CanSeePlayer())
         {
-            Debug.Log("can't see player");
+            GameController.Instance.StopCoroutine(shootCoroutine);
             owner.ChangeState(owner.GetParticularState(typeof(Alarm)));
         }
+
     }
 
     public override void Exit(Enemy owner)
     {
         owner.NavMeshAgent.isStopped = false;
-        GameController.Instance.StopAllCoroutines();
     }
 }
