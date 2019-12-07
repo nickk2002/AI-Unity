@@ -35,6 +35,7 @@ public class Shoot : State<Enemy>
     {
         while (true)
         {
+            enemy.animator.SetBool("idle", true);
             Draw(enemy.transform, Player.Instance.transform);
             enemy.playerState.TakenDamageEvent.Invoke(enemy.damage);
             yield return new WaitForSeconds(enemy.aiState.shootingDelay);
@@ -72,5 +73,6 @@ public class Shoot : State<Enemy>
     public override void Exit(Enemy owner)
     {
         owner.NavMeshAgent.isStopped = false;
+        owner.animator.SetBool("idle", false);
     }
 }
