@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PlayerHealth : MonoBehaviour
         curentHealth -= damage;
         playerState.curentHealth = curentHealth;
         if (curentHealth <= 0)
-            Destroy(gameObject);
+        {
+            SceneManager.LoadScene("GameOver");
+        }
     }
 }
