@@ -7,12 +7,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class ThirdPersonUserControl : MonoBehaviour
     {
+        [SerializeField] private GameObject reference;
         private ThirdPersonCharacter m_Character; // A reference to the ThirdPersonCharacter on the object
         private Transform m_Cam;                  // A reference to the main camera in the scenes transform
         private Vector3 m_CamForward;             // The current forward direction of the camera
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
-
+        public bool isMoving;
         
         private void Start()
         {
@@ -49,13 +50,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             float h = CrossPlatformInputManager.GetAxis("Horizontal");
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
-
+            if (v == 0 && h == 0)
+                isMoving = false;
+            else
+                isMoving = true;
             // calculate move direction to pass to character
-            if (m_Cam != null)
+            if (reference != null)
             {
                 // calculate camera relative direction to move:
-                m_CamForward = Vector3.Scale(m_Cam.forward, new Vector3(1, 0, 1)).normalized;
-                m_Move = v*m_CamForward + h*m_Cam.right;
+                m_CamForward = Vector3.Scale(reference.transform.forward, new Vector3(1, 0, 1)).normalized;
+                m_Move = v*m_CamForward + h*reference.transform.right;
             }
             else
             {

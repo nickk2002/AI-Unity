@@ -36,7 +36,7 @@ public class Shoot : State<Enemy>
         while (true)
         {
             enemy.animator.SetBool("idle", true);
-            Draw(enemy.transform, Player.Instance.transform);
+            Draw(enemy.transform, Player.GameobjectInstance.transform);
             enemy.playerState.TakenDamageEvent.Invoke(enemy.damage);
             yield return new WaitForSeconds(enemy.aiState.shootingDelay);
         }
@@ -47,7 +47,7 @@ public class Shoot : State<Enemy>
         {
             if (enemy.CanSeePlayer())
             {
-                enemy.SetLastSeenPlayer(Player.Instance.transform.position);
+                enemy.SetLastSeenPlayer(Player.GameobjectInstance.transform.position);
             }
             yield return new WaitForSeconds(enemy.aiState.shootingUpdatePosDelay);
         }    

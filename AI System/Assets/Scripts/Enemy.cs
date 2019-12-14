@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
     /// despre inamic -> jucator
     public float DistanceToPlayer()
     {
-        return Vector3.Distance(transform.position, Player.Instance.transform.position);
+        return Vector3.Distance(transform.position, Player.GameobjectInstance.transform.position);
     }
     public void SetDestination(Vector3 destination)
     {
@@ -119,7 +119,7 @@ public class Enemy : MonoBehaviour
                 if (Physics.Linecast(transform.position, targetPlayer.transform.position, out hit))
                 {
                     GameObject objectHit = hit.collider.gameObject;
-                    if (objectHit == Player.Instance)
+                    if (objectHit == Player.GameobjectInstance)
                         return true;
                 }
             }
@@ -142,7 +142,7 @@ public class Enemy : MonoBehaviour
 
         UnityEngine.Random.seed = DateTime.Now.Millisecond;
         if (targetPlayer == null)
-            targetPlayer = Player.Instance;
+            targetPlayer = Player.GameobjectInstance;
 
         SetPatrolPositions();
         SetLight();
