@@ -12,12 +12,12 @@ public class Enemy : MonoBehaviour
     /// Scriptale objects
     private EnemyController enemyController;
 
-    public string State;
     private StateMachine<Enemy> stateMachine;
 
-    [SerializeField] public float damage;
+
+    [SerializeField] private float damage;
     [SerializeField] private float distanceView;
-    [SerializeField] private float angle;
+    [SerializeField] private int angle;
     [SerializeField] private LayerMask viewMask;
 
     [SerializeField] public Transform[] patrolPositions;
@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
     /// despre inamic -> jucator
     public float DistanceToPlayer()
     {
-        return Vector3.Distance(transform.position, Player.GameobjectInstance.transform.position);
+        return Vector3.Distance(transform.position, targetPlayer.transform.position);
     }
     public void SetDestination(Vector3 destination)
     {
@@ -105,6 +105,10 @@ public class Enemy : MonoBehaviour
     public Vector3 GetLastSeenPlayer()
     {
         return aiState.lastSeendPlayer;
+    }
+    public void GiveDamage()
+    {
+        playerState.TakenDamageEvent.Invoke(damage);
     }
     public bool CanSeePlayer()
     {
@@ -176,25 +180,49 @@ public class Enemy : MonoBehaviour
         Vector3 destination = navMeshAgent.destination;
         if (destination != null)
         {
-            float dist = distanceView;
-            Vector3 direction = transform.forward;
-            direction = Quaternion.Euler(0, -angle, 0) * direction * dist;
-            Vector3 posLeft = transform.position + direction;
-            direction = transform.forward;
-            direction = Quaternion.Euler(0, angle, 0) * direction * dist;
-            Vector3 posRight = transform.position + direction;
 
-            //Debug.DrawLine(transform.position, targetPlayer.transform.position,Color.blue);
-            Gizmos.DrawLine(transform.position, posLeft);
-            Gizmos.DrawLine(transform.position, posRight);
-            Gizmos.DrawLine(posLeft, posRight);
             Gizmos.DrawSphere(destination, 0.5f);
             Gizmos.DrawLine(transform.position, destination);
         }
     }
     private void OnDrawGizmos()
     {
-        if(drawGizmos)
+        if (drawGizmos)
             Draw();
+
+        float dist = distanceView;
+
+
+        RaycastHit hit;
+        Vector3 [] cerc = new Vector3[angle * 2 + 1];
+        
+        for (int i = -angle; i <= angle; i++)
+        {
+            Vector3 direction = Quaternion.Euler(0, i, 0) * transform.forward;
+            if (Physics.Raycast(transform.position, direction, out hit,distanceView))
+            {
+                if (i == angle || i == -angle)
+                {
+                    Debug.DrawLine(transform.position, hit.point);
+                }
+                cerc[i + angle] = hit.point;
+            }
+            else
+            {   // no collider
+                if (i == angle || i == -angle)
+                {
+                    Debug.DrawLine(transform.position, transform.position + direction * distanceView);
+
+                }
+                cerc[i + angle] = transform.position + direction * distanceView;
+            }
+        }
+        for(int i = 0; i <= angle * 2 - 1; i++)
+        {
+            Debug.DrawLine(cerc[i], cerc[i + 1]);
+        }
+
+        
+
     }
 }

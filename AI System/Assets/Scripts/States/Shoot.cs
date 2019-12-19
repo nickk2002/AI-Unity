@@ -6,72 +6,52 @@ using UnityEngine.AI;
 
 public class Shoot : State<Enemy>
 {
-    private static Shoot instance = null;
-    private static object padlock = new object();
     private Enemy enemy;
-    private Coroutine shootCoroutine;
 
     public Shoot()
     {
 
     }
-    public static Shoot Instance
-    {
-        get
-        {
-            lock (padlock)
-            {
-                if (instance == null)
-                    instance = new Shoot();
-                return instance;
-            }
-        }
-    }
     void Draw(Transform enemy, Transform player)
     {
+        Debug.Log("Shooting");
         Debug.DrawLine(enemy.position, player.position, Color.green);
     }
     IEnumerator SimulareShoot()
     {
-        while (true)
+        enemy.animator.SetBool("idle", true);
+        enemy.NavMeshAgent.isStopped = true;
+        while (enemy.CanSeePlayer()) // daca pun true nu se opreste corutina deloc
         {
-            enemy.animator.SetBool("idle", true);
+           
             Draw(enemy.transform, Player.GameobjectInstance.transform);
-            enemy.playerState.TakenDamageEvent.Invoke(enemy.damage);
+            enemy.GiveDamage();
             yield return new WaitForSeconds(enemy.aiState.shootingDelay);
         }
     }
-    IEnumerator UpdatePlayerPosition()
+    IEnumerator ChangeState()
     {
-        while (true)
-        {
-            if (enemy.CanSeePlayer())
-            {
-                enemy.SetLastSeenPlayer(Player.GameobjectInstance.transform.position);
-            }
-            yield return new WaitForSeconds(enemy.aiState.shootingUpdatePosDelay);
-        }    
+        yield return new WaitForSeconds(0.5f);
+        enemy.ChangeState(enemy.GetParticularState(typeof(Alarm)));
     }
     public override void Enter(Enemy owner)
     {
         enemy = owner;
-        owner.NavMeshAgent.isStopped = true;
-        shootCoroutine = GameController.Instance.StartCoroutine(SimulareShoot());
-        GameController.Instance.StartCoroutine(UpdatePlayerPosition());
+        GameController.Instance.StartCoroutine(SimulareShoot());
     }
 
     public override void Execute(Enemy owner)
     {
         if (!owner.CanSeePlayer())
         {
-            GameController.Instance.StopCoroutine(shootCoroutine);
-            owner.ChangeState(owner.GetParticularState(typeof(Alarm)));
+            GameController.Instance.StopCoroutine(SimulareShoot());
+            GameController.Instance.StartCoroutine(ChangeState());
         }
 
     }
 
     public override void Exit(Enemy owner)
-    {
+    { 
         owner.NavMeshAgent.isStopped = false;
         owner.animator.SetBool("idle", false);
     }

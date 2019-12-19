@@ -74,12 +74,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: NavyGrid
-    second: {fileID: 2100000, guid: 76ff537c8e1a84345868e6aeee938ab3, type: 2}
+    second: {fileID: 2100000, guid: 5e9d2f9bdb6f2ac4e807ee364db31123, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: NavySmooth
-    second: {fileID: 2100000, guid: 1032d41f900276c40a9dd24f55b7d420, type: 2}
+    second: {fileID: 2100000, guid: abfc3d991b49d6843a5da27a951e7c2b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

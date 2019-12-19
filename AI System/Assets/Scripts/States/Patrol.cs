@@ -9,26 +9,10 @@ public class Patrol : State<Enemy>
     private Transform [] patrolPositions;
     private int index = 0;
     private int numberPositions = 0;
-    private static Patrol instance = null;
-    private static readonly object padlock = new object();
     private Enemy enemy;
     public Patrol()
     {
         patrolPositions = new Transform[] { };
-    }
-    public static Patrol Instance
-    {
-        get
-        {
-            lock (padlock)
-            {
-                if (instance == null)
-                {
-                    instance = new Patrol();
-                }
-                return instance;
-            }
-        }
     }
     public override void Enter(Enemy owner)
     {
@@ -40,9 +24,9 @@ public class Patrol : State<Enemy>
     {
         Vector3 destination = patrolPositions[index].position;
         /// owner.NavMeshAgent.transform.position -.> (10,0,10) , (0,0,0)
-        if (owner.NavMeshAgent.transform.position != destination)
+        if (owner.transform.position != destination)
             owner.SetDestination(destination);
-        if (Vector3.Distance(owner.NavMeshAgent.transform.position, destination) < 2f)
+        if (Vector3.Distance(owner.transform.position, destination) < 2f)
         {
             index++;
             index = index % numberPositions;

@@ -6,8 +6,6 @@ using System;
 
 public class Alarm : State<Enemy>
 {
-    private static Alarm instance = null;
-    private static object padlock = new object();
     private float radius;
     private float curentTries,numberTries;
     private float shootingDistance;
@@ -23,7 +21,7 @@ public class Alarm : State<Enemy>
 
         radius = owner.aiState.alarmSearchRadius;
         shootingDistance = owner.aiState.shootingDistance;
-        numberTries = owner.aiState.alarmInvestigateTries;
+        numberTries = owner.aiState.alarmSearchTries;
 
         owner.SetDestination(owner.aiState.lastSeendPlayer);
         owner.aiState.alarmEvent.Invoke();

@@ -12,29 +12,33 @@ public class CameraFollow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        UpdatePosition();   
     }
     void UpdatePosition()
     {
+        
         offset = target.position - transform.position;
     }
     void SetPosition()
     {
-        transform.position = target.position - offset;
+        transform.position = Vector3.Lerp(transform.position,target.position - offset,0.3f);
+    }
+    void Follow()
+    {
+        if (Player.ClassInstance.IsMoving())
+        {
+            if (lastMoveState == false)
+            {
+                UpdatePosition();
+            }
+            SetPosition();
+        }
+        lastMoveState = Player.ClassInstance.IsMoving();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(Player.ClassInstance.IsMoving())
-        {
-            if (lastMoveState == false)
-            {
-                UpdatePosition();
-                Debug.Log("plsss");
-            }
-            SetPosition();
-        }
-        lastMoveState = Player.ClassInstance.IsMoving();
+        Follow();
     }
 }
